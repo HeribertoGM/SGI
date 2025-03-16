@@ -1,0 +1,18 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[scripts]
+setup = "docker-compose up -d"
+setup-db = "docker run --name postgres_db --env-file ./.env -v ${PWD}/dbs/data:/var/lib/postgresql/data -v ${PWD}/dbs/init.sql:/docker-entrypoint-initdb.d/init.sql -v ${PWD}/dbs/insertions.sql:/docker-entrypoint-initdb.d/insertions.sql -p 5432:5432 -d postgres"
+stop-db = "bash -c 'docker stop postgres_db && docker rm postgres_db'"
+clear-db = "bash -c 'docker stop postgres_db && docker rm postgres_db && rm -r ./dbs/data'"
+
+[packages]
+
+[dev-packages]
+
+[requires]
+python_version = "3.8"
+python_full_version = "3.8.2"
