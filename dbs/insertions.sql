@@ -26,7 +26,7 @@ VALUES
   ('Product 20', 'Description of Product 20', 'Category C', 40.00, 'SKU020');
 
 -- Insert dummy data into the Inventory table
-INSERT INTO Inventory (productId, storeId, quantity, minStock)
+INSERT INTO Inventory (product_id, store_id, quantity, min_stock)
 VALUES
   ((SELECT p.id FROM Product p WHERE p.sku = 'SKU001'), '<UUID_FOR_STORE_1>', 200, 15),
   ((SELECT p.id FROM Product p WHERE p.sku = 'SKU002'), '<UUID_FOR_STORE_1>', 100, 10),
@@ -40,7 +40,7 @@ VALUES
   ((SELECT p.id FROM Product p WHERE p.sku = 'SKU010'), '<UUID_FOR_STORE_5>', 60, 6),
   ((SELECT p.id FROM Product p WHERE p.sku = 'SKU011'), '<UUID_FOR_STORE_1>', 70, 7),
   ((SELECT p.id FROM Product p WHERE p.sku = 'SKU012'), '<UUID_FOR_STORE_1>', 110, 10),
-  ((SELECT p.id FROM Product p WHERE p.sku = 'SKU013'), '<UUID_FOR_STORE_2>', 140, 14),
+  ((SELECT p.id FROM Product p WHERE p.sku = 'SKU018'), '<UUID_FOR_STORE_2>', 140, 14),
   ((SELECT p.id FROM Product p WHERE p.sku = 'SKU014'), '<UUID_FOR_STORE_2>', 180, 18),
   ((SELECT p.id FROM Product p WHERE p.sku = 'SKU015'), '<UUID_FOR_STORE_3>', 75, 7),
   ((SELECT p.id FROM Product p WHERE p.sku = 'SKU016'), '<UUID_FOR_STORE_3>', 210, 21),
@@ -50,7 +50,7 @@ VALUES
   ((SELECT p.id FROM Product p WHERE p.sku = 'SKU020'), '<UUID_FOR_STORE_5>', 100, 10);
 
 -- Insert dummy data into the Transfer table
-INSERT INTO Transfer (productId, sourceStoreId, targetStoreId, quantity, type)
+INSERT INTO Transfer (product_id, source_store_id, target_store_id, quantity, type)
 VALUES
   ((SELECT p.id FROM Product p WHERE p.sku = 'SKU001'), '<UUID_FOR_STORE_1>', '<UUID_FOR_STORE_2>', 50, 'TRANSFER'),
   ((SELECT p.id FROM Product p WHERE p.sku = 'SKU002'), '<UUID_FOR_STORE_1>', '<UUID_FOR_STORE_3>', 30, 'TRANSFER'),
