@@ -16,7 +16,7 @@ CREATE INDEX idx_product_price ON Product(price);
 -- Inventory Table
 CREATE TABLE Inventory (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    product_id UUID REFERENCES Product(id) ON DELETE CASCADE,
+    product_id UUID REFERENCES Product(id) ON DELETE CASCADE NOT NULL,
     store_id VARCHAR(50) NOT NULL,
     quantity INTEGER NOT NULL CHECK (quantity >= 0),
     min_stock INTEGER NOT NULL CHECK (min_stock >= 0),
@@ -28,7 +28,7 @@ CREATE INDEX idx_inventory_store_id ON Inventory(store_id);
 -- Transfer Table
 CREATE TABLE Transfer (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    product_id UUID REFERENCES Product(id) ON DELETE CASCADE,
+    product_id UUID REFERENCES Product(id) ON DELETE CASCADE NOT NULL,
     source_store_id VARCHAR(50),
     target_store_id VARCHAR(50),
     quantity INTEGER NOT NULL CHECK (quantity > 0),
