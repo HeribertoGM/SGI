@@ -1,0 +1,2530 @@
+"openapi": "3.1.1"
+"info":
+    "title": "SGI - Sistema de Gestión de Inventario"
+    "description": "API Rest desarrollada para gestionar el inventario de una cadena de tiendas minoristas, proporcionando control sobre productos, stock y transferencias entre sucursales."
+    "version": "1.0"
+"tags":
+    - "name": "Products"
+      "description": "/api/products"
+    - "name": "Stores"
+      "description": "/api/stores"
+    - "name": "Inventory"
+      "description": "/api/inventory"
+"paths":
+    "/api/products/health":
+        "get":
+            "tags":
+                - "Products"
+            "summary": "Get health of products app"
+            "description": "Get health of products app"
+            "operationId": "productsHealth"
+            "responses":
+                "200":
+                    "description": "successful operation"
+                    "content":
+                        "application/json":
+                            "schema":
+                                "type": "object"
+                                "properties":
+                                    "ok":
+                                        "type": "boolean"
+                                        "description": "request completed correctly"
+                                    "from":
+                                        "type": "string"
+                                        "example": "products"
+                                        "description": "service name"
+    "/api/products/":
+        "get":
+            "tags":
+                - "Products"
+            "summary": "Get full list of products"
+            "description": "Get full list of products with filters, sorting and pagination"
+            "operationId": "productsList"
+            "parameters":
+                - "name": "category"
+                  "in": "query"
+                  "description": "Filter by Category"
+                  "required": false
+                  "explode": true
+                  "schema":
+                      "type": "string"
+                - "name": "sku"
+                  "in": "query"
+                  "description": "Filter by sku id"
+                  "required": false
+                  "explode": true
+                  "schema":
+                      "type": "string"
+                - "name": "minPrice"
+                  "in": "query"
+                  "description": "Filter by min price"
+                  "required": false
+                  "explode": true
+                  "schema":
+                      "type": "number"
+                - "name": "maxPrice"
+                  "in": "query"
+                  "description": "Filter by max price"
+                  "required": false
+                  "explode": true
+                  "schema":
+                      "type": "number"
+                - "name": "minStock"
+                  "in": "query"
+                  "description": "Filter by min cumulative stock"
+                  "required": false
+                  "explode": true
+                  "schema":
+                      "type": "number"
+                - "name": "maxStock"
+                  "in": "query"
+                  "description": "Filter by max cumulative stock"
+                  "required": false
+                  "explode": true
+                  "schema":
+                      "type": "number"
+                - "name": "page"
+                  "in": "query"
+                  "description": "Set index of page to request"
+                  "required": false
+                  "explode": true
+                  "schema":
+                      "type": "number"
+                - "name": "perPage"
+                  "in": "query"
+                  "description": "Set amount of items per page"
+                  "required": false
+                  "explode": true
+                  "schema":
+                      "type": "number"
+                - "name": "orderBy"
+                  "in": "query"
+                  "description": "Set order of items"
+                  "required": false
+                  "explode": true
+                  "schema":
+                      "type": "string"
+            "responses":
+                "default":
+                    "description": "Unexpected error or not found"
+                    "content":
+                        "application/json":
+                            "schema":
+                                "type": "object"
+                                "properties":
+                                    "ok":
+                                        "type": "boolean"
+                                        "description": "request completed correctly"
+                                    "length":
+                                        "type": "number"
+                                        "example": 0
+                                        "description": "total items in page"
+                                    "total":
+                                        "type": "number"
+                                        "example": 0
+                                        "description": "total items in query"
+                                    "data":
+                                        "type": "array"
+                                        "example": []
+                                        "description": "array or value of processed element"
+                                        "items":
+                                            "required":
+                                                - "name"
+                                                - "price"
+                                                - "sku"
+                                            "type": "object"
+                                            "properties":
+                                                "id":
+                                                    "type": "string"
+                                                    "format": "uuid"
+                                                    "description": "autogenerated"
+                                                    "example": "3412a2ed-b08c-4580-a196-62187c698eb8"
+                                                "name":
+                                                    "type": "string"
+                                                    "example": "Product X"
+                                                "description":
+                                                    "type": "string"
+                                                    "example": "this is a description for product X"
+                                                "price":
+                                                    "type": "number"
+                                                    "format": "float"
+                                                    "example": 10
+                                                "sku":
+                                                    "type": "string"
+                                                    "example": "SKU00X"
+                                                "stock":
+                                                    "type": "number"
+                                                    "description": "autogenerated, only for (GET) /api/products"
+                                                    "example": 140
+                "200":
+                    "description": "successful operation"
+                    "content":
+                        "application/json":
+                            "schema":
+                                "type": "object"
+                                "properties":
+                                    "ok":
+                                        "type": "boolean"
+                                        "description": "request completed correctly"
+                                    "length":
+                                        "type": "number"
+                                        "example": 10
+                                        "description": "total items in page"
+                                    "total":
+                                        "type": "number"
+                                        "example": 20
+                                        "description": "total items in query"
+                                    "data":
+                                        "type": "array"
+                                        "description": "array of processed elements"
+                                        "items":
+                                            "anyOf":
+                                                - "required":
+                                                      - "name"
+                                                      - "price"
+                                                      - "sku"
+                                                  "type": "object"
+                                                  "properties":
+                                                      "id":
+                                                          "type": "string"
+                                                          "format": "uuid"
+                                                          "description": "autogenerated"
+                                                          "example": "3412a2ed-b08c-4580-a196-62187c698eb8"
+                                                      "name":
+                                                          "type": "string"
+                                                          "example": "Product X"
+                                                      "description":
+                                                          "type": "string"
+                                                          "example": "this is a description for product X"
+                                                      "price":
+                                                          "type": "number"
+                                                          "format": "float"
+                                                          "example": 10
+                                                      "sku":
+                                                          "type": "string"
+                                                          "example": "SKU00X"
+                                                      "stock":
+                                                          "type": "number"
+                                                          "description": "autogenerated, only for (GET) /api/products"
+                                                          "example": 140
+                                                - "required":
+                                                      - "product_id"
+                                                      - "store_id"
+                                                      - "quantity"
+                                                      - "min_stock"
+                                                  "type": "object"
+                                                  "properties":
+                                                      "id":
+                                                          "type": "string"
+                                                          "format": "uuid"
+                                                          "description": "autogenerated"
+                                                          "example": "3412a2ed-b08c-4580-a196-62187c698eb8"
+                                                      "product_id":
+                                                          "type": "string"
+                                                          "format": "uuid"
+                                                          "description": "autogenerated"
+                                                          "example": "3412a2ed-b08c-4580-a196-62187c698eb8"
+                                                      "store_id":
+                                                          "type": "string"
+                                                          "example": "<UUID_FOR_STORE_5>"
+                                                          "description": "id of store"
+                                                      "quantity":
+                                                          "type": "number"
+                                                          "format": "int"
+                                                          "description": "avaliable stock of product in store"
+                                                          "example": 100
+                                                      "min_stock":
+                                                          "type": "number"
+                                                          "format": "int"
+                                                          "description": "stock threshold for product in store"
+                                                          "example": 140
+        "post":
+            "tags":
+                - "Products"
+            "summary": "Add a new product"
+            "description": "Add a new product"
+            "operationId": "productsAdd"
+            "requestBody":
+                "content":
+                    "application/json":
+                        "schema":
+                            "required":
+                                - "name"
+                                - "price"
+                                - "sku"
+                            "type": "object"
+                            "properties":
+                                "id":
+                                    "type": "string"
+                                    "format": "uuid"
+                                    "description": "autogenerated"
+                                    "example": "3412a2ed-b08c-4580-a196-62187c698eb8"
+                                "name":
+                                    "type": "string"
+                                    "example": "Product X"
+                                "description":
+                                    "type": "string"
+                                    "example": "this is a description for product X"
+                                "price":
+                                    "type": "number"
+                                    "format": "float"
+                                    "example": 10
+                                "sku":
+                                    "type": "string"
+                                    "example": "SKU00X"
+                                "stock":
+                                    "type": "number"
+                                    "description": "autogenerated, only for (GET) /api/products"
+                                    "example": 140
+            "responses":
+                "default":
+                    "description": "Unexpected error"
+                    "content":
+                        "application/json":
+                            "schema":
+                                "type": "object"
+                                "properties":
+                                    "ok":
+                                        "type": "boolean"
+                                        "default": false
+                                    "error":
+                                        "type": "string"
+                                        "description": "Error name"
+                                        "example": "FieldConstraintViolation"
+                                    "message":
+                                        "type": "string"
+                                        "description": "Error description"
+                                        "example": "Price field value can't be less than zero."
+                                    "payload":
+                                        "type": "object"
+                                        "description": "input values"
+                                        "anyOf":
+                                            - "required":
+                                                  - "name"
+                                                  - "price"
+                                                  - "sku"
+                                              "type": "object"
+                                              "properties":
+                                                  "id":
+                                                      "type": "string"
+                                                      "format": "uuid"
+                                                      "description": "autogenerated"
+                                                      "example": "3412a2ed-b08c-4580-a196-62187c698eb8"
+                                                  "name":
+                                                      "type": "string"
+                                                      "example": "Product X"
+                                                  "description":
+                                                      "type": "string"
+                                                      "example": "this is a description for product X"
+                                                  "price":
+                                                      "type": "number"
+                                                      "format": "float"
+                                                      "example": 10
+                                                  "sku":
+                                                      "type": "string"
+                                                      "example": "SKU00X"
+                                                  "stock":
+                                                      "type": "number"
+                                                      "description": "autogenerated, only for (GET) /api/products"
+                                                      "example": 140
+                                            - "required":
+                                                  - "product_id"
+                                                  - "store_id"
+                                                  - "quantity"
+                                                  - "min_stock"
+                                              "type": "object"
+                                              "properties":
+                                                  "id":
+                                                      "type": "string"
+                                                      "format": "uuid"
+                                                      "description": "autogenerated"
+                                                      "example": "3412a2ed-b08c-4580-a196-62187c698eb8"
+                                                  "product_id":
+                                                      "type": "string"
+                                                      "format": "uuid"
+                                                      "description": "autogenerated"
+                                                      "example": "3412a2ed-b08c-4580-a196-62187c698eb8"
+                                                  "store_id":
+                                                      "type": "string"
+                                                      "example": "<UUID_FOR_STORE_5>"
+                                                      "description": "id of store"
+                                                  "quantity":
+                                                      "type": "number"
+                                                      "format": "int"
+                                                      "description": "avaliable stock of product in store"
+                                                      "example": 100
+                                                  "min_stock":
+                                                      "type": "number"
+                                                      "format": "int"
+                                                      "description": "stock threshold for product in store"
+                                                      "example": 140
+                                            - "required":
+                                                  - "product_id"
+                                                  - "quantity"
+                                                  - "type"
+                                              "type": "object"
+                                              "properties":
+                                                  "id":
+                                                      "type": "string"
+                                                      "format": "uuid"
+                                                      "description": "autogenerated"
+                                                      "example": "3412a2ed-b08c-4580-a196-62187c698eb8"
+                                                  "product_id":
+                                                      "type": "string"
+                                                      "format": "uuid"
+                                                      "description": "autogenerated"
+                                                      "example": "3412a2ed-b08c-4580-a196-62187c698eb8"
+                                                  "source_store_id":
+                                                      "type": "string"
+                                                      "example": "<UUID_FOR_STORE_5>"
+                                                      "description": "id of source store"
+                                                  "target_store_id":
+                                                      "type": "string"
+                                                      "example": "<UUID_FOR_STORE_5>"
+                                                      "description": "id of target store"
+                                                  "quantity":
+                                                      "type": "number"
+                                                      "format": "int"
+                                                      "example": 100
+                                                      "description": "ammount of stock to move from source to target store inventory"
+                                                  "type":
+                                                      "enum":
+                                                          - "TRANSFER"
+                                                          - "IN"
+                                                          - "OUT"
+                                                      "type": "string"
+                                                      "description": "type of transaction"
+                                                      "example": "TRANSFER"
+                "200":
+                    "description": "successful operation"
+                    "content":
+                        "application/json":
+                            "schema":
+                                "type": "object"
+                                "properties":
+                                    "ok":
+                                        "type": "boolean"
+                                        "description": "request completed correctly"
+                                    "data":
+                                        "anyOf":
+                                            - "required":
+                                                  - "name"
+                                                  - "price"
+                                                  - "sku"
+                                              "type": "object"
+                                              "properties":
+                                                  "id":
+                                                      "type": "string"
+                                                      "format": "uuid"
+                                                      "description": "autogenerated"
+                                                      "example": "3412a2ed-b08c-4580-a196-62187c698eb8"
+                                                  "name":
+                                                      "type": "string"
+                                                      "example": "Product X"
+                                                  "description":
+                                                      "type": "string"
+                                                      "example": "this is a description for product X"
+                                                  "price":
+                                                      "type": "number"
+                                                      "format": "float"
+                                                      "example": 10
+                                                  "sku":
+                                                      "type": "string"
+                                                      "example": "SKU00X"
+                                                  "stock":
+                                                      "type": "number"
+                                                      "description": "autogenerated, only for (GET) /api/products"
+                                                      "example": 140
+                                            - "required":
+                                                  - "product_id"
+                                                  - "quantity"
+                                                  - "type"
+                                              "type": "object"
+                                              "properties":
+                                                  "id":
+                                                      "type": "string"
+                                                      "format": "uuid"
+                                                      "description": "autogenerated"
+                                                      "example": "3412a2ed-b08c-4580-a196-62187c698eb8"
+                                                  "product_id":
+                                                      "type": "string"
+                                                      "format": "uuid"
+                                                      "description": "autogenerated"
+                                                      "example": "3412a2ed-b08c-4580-a196-62187c698eb8"
+                                                  "source_store_id":
+                                                      "type": "string"
+                                                      "example": "<UUID_FOR_STORE_5>"
+                                                      "description": "id of source store"
+                                                  "target_store_id":
+                                                      "type": "string"
+                                                      "example": "<UUID_FOR_STORE_5>"
+                                                      "description": "id of target store"
+                                                  "quantity":
+                                                      "type": "number"
+                                                      "format": "int"
+                                                      "example": 100
+                                                      "description": "ammount of stock to move from source to target store inventory"
+                                                  "type":
+                                                      "enum":
+                                                          - "TRANSFER"
+                                                          - "IN"
+                                                          - "OUT"
+                                                      "type": "string"
+                                                      "description": "type of transaction"
+                                                      "example": "TRANSFER"
+                                    "payload":
+                                        "type": "object"
+                                        "description": "input values"
+                                        "anyOf":
+                                            - "required":
+                                                  - "name"
+                                                  - "price"
+                                                  - "sku"
+                                              "type": "object"
+                                              "properties":
+                                                  "id":
+                                                      "type": "string"
+                                                      "format": "uuid"
+                                                      "description": "autogenerated"
+                                                      "example": "3412a2ed-b08c-4580-a196-62187c698eb8"
+                                                  "name":
+                                                      "type": "string"
+                                                      "example": "Product X"
+                                                  "description":
+                                                      "type": "string"
+                                                      "example": "this is a description for product X"
+                                                  "price":
+                                                      "type": "number"
+                                                      "format": "float"
+                                                      "example": 10
+                                                  "sku":
+                                                      "type": "string"
+                                                      "example": "SKU00X"
+                                                  "stock":
+                                                      "type": "number"
+                                                      "description": "autogenerated, only for (GET) /api/products"
+                                                      "example": 140
+                                            - "required":
+                                                  - "product_id"
+                                                  - "quantity"
+                                                  - "type"
+                                              "type": "object"
+                                              "properties":
+                                                  "id":
+                                                      "type": "string"
+                                                      "format": "uuid"
+                                                      "description": "autogenerated"
+                                                      "example": "3412a2ed-b08c-4580-a196-62187c698eb8"
+                                                  "product_id":
+                                                      "type": "string"
+                                                      "format": "uuid"
+                                                      "description": "autogenerated"
+                                                      "example": "3412a2ed-b08c-4580-a196-62187c698eb8"
+                                                  "source_store_id":
+                                                      "type": "string"
+                                                      "example": "<UUID_FOR_STORE_5>"
+                                                      "description": "id of source store"
+                                                  "target_store_id":
+                                                      "type": "string"
+                                                      "example": "<UUID_FOR_STORE_5>"
+                                                      "description": "id of target store"
+                                                  "quantity":
+                                                      "type": "number"
+                                                      "format": "int"
+                                                      "example": 100
+                                                      "description": "ammount of stock to move from source to target store inventory"
+                                                  "type":
+                                                      "enum":
+                                                          - "TRANSFER"
+                                                          - "IN"
+                                                          - "OUT"
+                                                      "type": "string"
+                                                      "description": "type of transaction"
+                                                      "example": "TRANSFER"
+    "/api/products/{product_id}":
+        "get":
+            "tags":
+                - "Products"
+            "summary": "Get detail of product"
+            "description": "Get detail of product"
+            "operationId": "productsDetail"
+            "parameters":
+                - "name": "product_id"
+                  "in": "path"
+                  "description": "ID of product to return"
+                  "required": true
+                  "schema":
+                      "type": "string"
+                      "format": "uuid"
+            "responses":
+                "default":
+                    "description": "Unexpected error or not found"
+                    "content":
+                        "application/json":
+                            "schema":
+                                "type": "object"
+                                "properties":
+                                    "ok":
+                                        "type": "boolean"
+                                        "default": false
+                                    "error":
+                                        "type": "string"
+                                        "description": "Error name"
+                                        "example": "FieldConstraintViolation"
+                                    "message":
+                                        "type": "string"
+                                        "description": "Error description"
+                                        "example": "Price field value can't be less than zero."
+                                    "payload":
+                                        "type": "object"
+                                        "description": "input values"
+                                        "anyOf":
+                                            - "required":
+                                                  - "name"
+                                                  - "price"
+                                                  - "sku"
+                                              "type": "object"
+                                              "properties":
+                                                  "id":
+                                                      "type": "string"
+                                                      "format": "uuid"
+                                                      "description": "autogenerated"
+                                                      "example": "3412a2ed-b08c-4580-a196-62187c698eb8"
+                                                  "name":
+                                                      "type": "string"
+                                                      "example": "Product X"
+                                                  "description":
+                                                      "type": "string"
+                                                      "example": "this is a description for product X"
+                                                  "price":
+                                                      "type": "number"
+                                                      "format": "float"
+                                                      "example": 10
+                                                  "sku":
+                                                      "type": "string"
+                                                      "example": "SKU00X"
+                                                  "stock":
+                                                      "type": "number"
+                                                      "description": "autogenerated, only for (GET) /api/products"
+                                                      "example": 140
+                                            - "required":
+                                                  - "product_id"
+                                                  - "store_id"
+                                                  - "quantity"
+                                                  - "min_stock"
+                                              "type": "object"
+                                              "properties":
+                                                  "id":
+                                                      "type": "string"
+                                                      "format": "uuid"
+                                                      "description": "autogenerated"
+                                                      "example": "3412a2ed-b08c-4580-a196-62187c698eb8"
+                                                  "product_id":
+                                                      "type": "string"
+                                                      "format": "uuid"
+                                                      "description": "autogenerated"
+                                                      "example": "3412a2ed-b08c-4580-a196-62187c698eb8"
+                                                  "store_id":
+                                                      "type": "string"
+                                                      "example": "<UUID_FOR_STORE_5>"
+                                                      "description": "id of store"
+                                                  "quantity":
+                                                      "type": "number"
+                                                      "format": "int"
+                                                      "description": "avaliable stock of product in store"
+                                                      "example": 100
+                                                  "min_stock":
+                                                      "type": "number"
+                                                      "format": "int"
+                                                      "description": "stock threshold for product in store"
+                                                      "example": 140
+                                            - "required":
+                                                  - "product_id"
+                                                  - "quantity"
+                                                  - "type"
+                                              "type": "object"
+                                              "properties":
+                                                  "id":
+                                                      "type": "string"
+                                                      "format": "uuid"
+                                                      "description": "autogenerated"
+                                                      "example": "3412a2ed-b08c-4580-a196-62187c698eb8"
+                                                  "product_id":
+                                                      "type": "string"
+                                                      "format": "uuid"
+                                                      "description": "autogenerated"
+                                                      "example": "3412a2ed-b08c-4580-a196-62187c698eb8"
+                                                  "source_store_id":
+                                                      "type": "string"
+                                                      "example": "<UUID_FOR_STORE_5>"
+                                                      "description": "id of source store"
+                                                  "target_store_id":
+                                                      "type": "string"
+                                                      "example": "<UUID_FOR_STORE_5>"
+                                                      "description": "id of target store"
+                                                  "quantity":
+                                                      "type": "number"
+                                                      "format": "int"
+                                                      "example": 100
+                                                      "description": "ammount of stock to move from source to target store inventory"
+                                                  "type":
+                                                      "enum":
+                                                          - "TRANSFER"
+                                                          - "IN"
+                                                          - "OUT"
+                                                      "type": "string"
+                                                      "description": "type of transaction"
+                                                      "example": "TRANSFER"
+                "200":
+                    "description": "successful operation"
+                    "content":
+                        "application/json":
+                            "schema":
+                                "type": "object"
+                                "properties":
+                                    "ok":
+                                        "type": "boolean"
+                                        "description": "request completed correctly"
+                                    "data":
+                                        "anyOf":
+                                            - "required":
+                                                  - "name"
+                                                  - "price"
+                                                  - "sku"
+                                              "type": "object"
+                                              "properties":
+                                                  "id":
+                                                      "type": "string"
+                                                      "format": "uuid"
+                                                      "description": "autogenerated"
+                                                      "example": "3412a2ed-b08c-4580-a196-62187c698eb8"
+                                                  "name":
+                                                      "type": "string"
+                                                      "example": "Product X"
+                                                  "description":
+                                                      "type": "string"
+                                                      "example": "this is a description for product X"
+                                                  "price":
+                                                      "type": "number"
+                                                      "format": "float"
+                                                      "example": 10
+                                                  "sku":
+                                                      "type": "string"
+                                                      "example": "SKU00X"
+                                                  "stock":
+                                                      "type": "number"
+                                                      "description": "autogenerated, only for (GET) /api/products"
+                                                      "example": 140
+                                            - "required":
+                                                  - "product_id"
+                                                  - "quantity"
+                                                  - "type"
+                                              "type": "object"
+                                              "properties":
+                                                  "id":
+                                                      "type": "string"
+                                                      "format": "uuid"
+                                                      "description": "autogenerated"
+                                                      "example": "3412a2ed-b08c-4580-a196-62187c698eb8"
+                                                  "product_id":
+                                                      "type": "string"
+                                                      "format": "uuid"
+                                                      "description": "autogenerated"
+                                                      "example": "3412a2ed-b08c-4580-a196-62187c698eb8"
+                                                  "source_store_id":
+                                                      "type": "string"
+                                                      "example": "<UUID_FOR_STORE_5>"
+                                                      "description": "id of source store"
+                                                  "target_store_id":
+                                                      "type": "string"
+                                                      "example": "<UUID_FOR_STORE_5>"
+                                                      "description": "id of target store"
+                                                  "quantity":
+                                                      "type": "number"
+                                                      "format": "int"
+                                                      "example": 100
+                                                      "description": "ammount of stock to move from source to target store inventory"
+                                                  "type":
+                                                      "enum":
+                                                          - "TRANSFER"
+                                                          - "IN"
+                                                          - "OUT"
+                                                      "type": "string"
+                                                      "description": "type of transaction"
+                                                      "example": "TRANSFER"
+                                    "payload":
+                                        "type": "object"
+                                        "description": "input values"
+                                        "anyOf":
+                                            - "required":
+                                                  - "name"
+                                                  - "price"
+                                                  - "sku"
+                                              "type": "object"
+                                              "properties":
+                                                  "id":
+                                                      "type": "string"
+                                                      "format": "uuid"
+                                                      "description": "autogenerated"
+                                                      "example": "3412a2ed-b08c-4580-a196-62187c698eb8"
+                                                  "name":
+                                                      "type": "string"
+                                                      "example": "Product X"
+                                                  "description":
+                                                      "type": "string"
+                                                      "example": "this is a description for product X"
+                                                  "price":
+                                                      "type": "number"
+                                                      "format": "float"
+                                                      "example": 10
+                                                  "sku":
+                                                      "type": "string"
+                                                      "example": "SKU00X"
+                                                  "stock":
+                                                      "type": "number"
+                                                      "description": "autogenerated, only for (GET) /api/products"
+                                                      "example": 140
+                                            - "required":
+                                                  - "product_id"
+                                                  - "quantity"
+                                                  - "type"
+                                              "type": "object"
+                                              "properties":
+                                                  "id":
+                                                      "type": "string"
+                                                      "format": "uuid"
+                                                      "description": "autogenerated"
+                                                      "example": "3412a2ed-b08c-4580-a196-62187c698eb8"
+                                                  "product_id":
+                                                      "type": "string"
+                                                      "format": "uuid"
+                                                      "description": "autogenerated"
+                                                      "example": "3412a2ed-b08c-4580-a196-62187c698eb8"
+                                                  "source_store_id":
+                                                      "type": "string"
+                                                      "example": "<UUID_FOR_STORE_5>"
+                                                      "description": "id of source store"
+                                                  "target_store_id":
+                                                      "type": "string"
+                                                      "example": "<UUID_FOR_STORE_5>"
+                                                      "description": "id of target store"
+                                                  "quantity":
+                                                      "type": "number"
+                                                      "format": "int"
+                                                      "example": 100
+                                                      "description": "ammount of stock to move from source to target store inventory"
+                                                  "type":
+                                                      "enum":
+                                                          - "TRANSFER"
+                                                          - "IN"
+                                                          - "OUT"
+                                                      "type": "string"
+                                                      "description": "type of transaction"
+                                                      "example": "TRANSFER"
+        "put":
+            "tags":
+                - "Products"
+            "summary": "Update product info"
+            "description": "Update product info"
+            "operationId": "productsUpdate"
+            "parameters":
+                - "name": "product_id"
+                  "in": "path"
+                  "description": "ID of product to return"
+                  "required": true
+                  "schema":
+                      "type": "string"
+                      "format": "uuid"
+            "requestBody":
+                "content":
+                    "application/json":
+                        "schema":
+                            "type": "object"
+                            "properties":
+                                "price":
+                                    "type": "number"
+                                    "format": "float"
+                                    "example": 10
+            "responses":
+                "default":
+                    "description": "Unexpected error or not found"
+                    "content":
+                        "application/json":
+                            "schema":
+                                "type": "object"
+                                "properties":
+                                    "ok":
+                                        "type": "boolean"
+                                        "default": false
+                                    "error":
+                                        "type": "string"
+                                        "description": "Error name"
+                                        "example": "FieldConstraintViolation"
+                                    "message":
+                                        "type": "string"
+                                        "description": "Error description"
+                                        "example": "Price field value can't be less than zero."
+                                    "payload":
+                                        "type": "object"
+                                        "description": "input values"
+                                        "anyOf":
+                                            - "required":
+                                                  - "name"
+                                                  - "price"
+                                                  - "sku"
+                                              "type": "object"
+                                              "properties":
+                                                  "id":
+                                                      "type": "string"
+                                                      "format": "uuid"
+                                                      "description": "autogenerated"
+                                                      "example": "3412a2ed-b08c-4580-a196-62187c698eb8"
+                                                  "name":
+                                                      "type": "string"
+                                                      "example": "Product X"
+                                                  "description":
+                                                      "type": "string"
+                                                      "example": "this is a description for product X"
+                                                  "price":
+                                                      "type": "number"
+                                                      "format": "float"
+                                                      "example": 10
+                                                  "sku":
+                                                      "type": "string"
+                                                      "example": "SKU00X"
+                                                  "stock":
+                                                      "type": "number"
+                                                      "description": "autogenerated, only for (GET) /api/products"
+                                                      "example": 140
+                                            - "required":
+                                                  - "product_id"
+                                                  - "store_id"
+                                                  - "quantity"
+                                                  - "min_stock"
+                                              "type": "object"
+                                              "properties":
+                                                  "id":
+                                                      "type": "string"
+                                                      "format": "uuid"
+                                                      "description": "autogenerated"
+                                                      "example": "3412a2ed-b08c-4580-a196-62187c698eb8"
+                                                  "product_id":
+                                                      "type": "string"
+                                                      "format": "uuid"
+                                                      "description": "autogenerated"
+                                                      "example": "3412a2ed-b08c-4580-a196-62187c698eb8"
+                                                  "store_id":
+                                                      "type": "string"
+                                                      "example": "<UUID_FOR_STORE_5>"
+                                                      "description": "id of store"
+                                                  "quantity":
+                                                      "type": "number"
+                                                      "format": "int"
+                                                      "description": "avaliable stock of product in store"
+                                                      "example": 100
+                                                  "min_stock":
+                                                      "type": "number"
+                                                      "format": "int"
+                                                      "description": "stock threshold for product in store"
+                                                      "example": 140
+                                            - "required":
+                                                  - "product_id"
+                                                  - "quantity"
+                                                  - "type"
+                                              "type": "object"
+                                              "properties":
+                                                  "id":
+                                                      "type": "string"
+                                                      "format": "uuid"
+                                                      "description": "autogenerated"
+                                                      "example": "3412a2ed-b08c-4580-a196-62187c698eb8"
+                                                  "product_id":
+                                                      "type": "string"
+                                                      "format": "uuid"
+                                                      "description": "autogenerated"
+                                                      "example": "3412a2ed-b08c-4580-a196-62187c698eb8"
+                                                  "source_store_id":
+                                                      "type": "string"
+                                                      "example": "<UUID_FOR_STORE_5>"
+                                                      "description": "id of source store"
+                                                  "target_store_id":
+                                                      "type": "string"
+                                                      "example": "<UUID_FOR_STORE_5>"
+                                                      "description": "id of target store"
+                                                  "quantity":
+                                                      "type": "number"
+                                                      "format": "int"
+                                                      "example": 100
+                                                      "description": "ammount of stock to move from source to target store inventory"
+                                                  "type":
+                                                      "enum":
+                                                          - "TRANSFER"
+                                                          - "IN"
+                                                          - "OUT"
+                                                      "type": "string"
+                                                      "description": "type of transaction"
+                                                      "example": "TRANSFER"
+                "200":
+                    "description": "successful operation"
+                    "content":
+                        "application/json":
+                            "schema":
+                                "type": "object"
+                                "properties":
+                                    "ok":
+                                        "type": "boolean"
+                                        "description": "request completed correctly"
+                                    "data":
+                                        "anyOf":
+                                            - "required":
+                                                  - "name"
+                                                  - "price"
+                                                  - "sku"
+                                              "type": "object"
+                                              "properties":
+                                                  "id":
+                                                      "type": "string"
+                                                      "format": "uuid"
+                                                      "description": "autogenerated"
+                                                      "example": "3412a2ed-b08c-4580-a196-62187c698eb8"
+                                                  "name":
+                                                      "type": "string"
+                                                      "example": "Product X"
+                                                  "description":
+                                                      "type": "string"
+                                                      "example": "this is a description for product X"
+                                                  "price":
+                                                      "type": "number"
+                                                      "format": "float"
+                                                      "example": 10
+                                                  "sku":
+                                                      "type": "string"
+                                                      "example": "SKU00X"
+                                                  "stock":
+                                                      "type": "number"
+                                                      "description": "autogenerated, only for (GET) /api/products"
+                                                      "example": 140
+                                            - "required":
+                                                  - "product_id"
+                                                  - "quantity"
+                                                  - "type"
+                                              "type": "object"
+                                              "properties":
+                                                  "id":
+                                                      "type": "string"
+                                                      "format": "uuid"
+                                                      "description": "autogenerated"
+                                                      "example": "3412a2ed-b08c-4580-a196-62187c698eb8"
+                                                  "product_id":
+                                                      "type": "string"
+                                                      "format": "uuid"
+                                                      "description": "autogenerated"
+                                                      "example": "3412a2ed-b08c-4580-a196-62187c698eb8"
+                                                  "source_store_id":
+                                                      "type": "string"
+                                                      "example": "<UUID_FOR_STORE_5>"
+                                                      "description": "id of source store"
+                                                  "target_store_id":
+                                                      "type": "string"
+                                                      "example": "<UUID_FOR_STORE_5>"
+                                                      "description": "id of target store"
+                                                  "quantity":
+                                                      "type": "number"
+                                                      "format": "int"
+                                                      "example": 100
+                                                      "description": "ammount of stock to move from source to target store inventory"
+                                                  "type":
+                                                      "enum":
+                                                          - "TRANSFER"
+                                                          - "IN"
+                                                          - "OUT"
+                                                      "type": "string"
+                                                      "description": "type of transaction"
+                                                      "example": "TRANSFER"
+                                    "payload":
+                                        "type": "object"
+                                        "description": "input values"
+                                        "anyOf":
+                                            - "required":
+                                                  - "name"
+                                                  - "price"
+                                                  - "sku"
+                                              "type": "object"
+                                              "properties":
+                                                  "id":
+                                                      "type": "string"
+                                                      "format": "uuid"
+                                                      "description": "autogenerated"
+                                                      "example": "3412a2ed-b08c-4580-a196-62187c698eb8"
+                                                  "name":
+                                                      "type": "string"
+                                                      "example": "Product X"
+                                                  "description":
+                                                      "type": "string"
+                                                      "example": "this is a description for product X"
+                                                  "price":
+                                                      "type": "number"
+                                                      "format": "float"
+                                                      "example": 10
+                                                  "sku":
+                                                      "type": "string"
+                                                      "example": "SKU00X"
+                                                  "stock":
+                                                      "type": "number"
+                                                      "description": "autogenerated, only for (GET) /api/products"
+                                                      "example": 140
+                                            - "required":
+                                                  - "product_id"
+                                                  - "quantity"
+                                                  - "type"
+                                              "type": "object"
+                                              "properties":
+                                                  "id":
+                                                      "type": "string"
+                                                      "format": "uuid"
+                                                      "description": "autogenerated"
+                                                      "example": "3412a2ed-b08c-4580-a196-62187c698eb8"
+                                                  "product_id":
+                                                      "type": "string"
+                                                      "format": "uuid"
+                                                      "description": "autogenerated"
+                                                      "example": "3412a2ed-b08c-4580-a196-62187c698eb8"
+                                                  "source_store_id":
+                                                      "type": "string"
+                                                      "example": "<UUID_FOR_STORE_5>"
+                                                      "description": "id of source store"
+                                                  "target_store_id":
+                                                      "type": "string"
+                                                      "example": "<UUID_FOR_STORE_5>"
+                                                      "description": "id of target store"
+                                                  "quantity":
+                                                      "type": "number"
+                                                      "format": "int"
+                                                      "example": 100
+                                                      "description": "ammount of stock to move from source to target store inventory"
+                                                  "type":
+                                                      "enum":
+                                                          - "TRANSFER"
+                                                          - "IN"
+                                                          - "OUT"
+                                                      "type": "string"
+                                                      "description": "type of transaction"
+                                                      "example": "TRANSFER"
+        "delete":
+            "tags":
+                - "Products"
+            "summary": "Delete product"
+            "description": "Delete product"
+            "operationId": "productsRemove"
+            "parameters":
+                - "name": "product_id"
+                  "in": "path"
+                  "description": "ID of product to return"
+                  "required": true
+                  "schema":
+                      "type": "string"
+                      "format": "uuid"
+            "responses":
+                "default":
+                    "description": "Unexpected error or not found"
+                    "content":
+                        "application/json":
+                            "schema":
+                                "type": "object"
+                                "properties":
+                                    "ok":
+                                        "type": "boolean"
+                                        "default": false
+                                    "error":
+                                        "type": "string"
+                                        "description": "Error name"
+                                        "example": "FieldConstraintViolation"
+                                    "message":
+                                        "type": "string"
+                                        "description": "Error description"
+                                        "example": "Price field value can't be less than zero."
+                                    "payload":
+                                        "type": "object"
+                                        "description": "input values"
+                                        "anyOf":
+                                            - "required":
+                                                  - "name"
+                                                  - "price"
+                                                  - "sku"
+                                              "type": "object"
+                                              "properties":
+                                                  "id":
+                                                      "type": "string"
+                                                      "format": "uuid"
+                                                      "description": "autogenerated"
+                                                      "example": "3412a2ed-b08c-4580-a196-62187c698eb8"
+                                                  "name":
+                                                      "type": "string"
+                                                      "example": "Product X"
+                                                  "description":
+                                                      "type": "string"
+                                                      "example": "this is a description for product X"
+                                                  "price":
+                                                      "type": "number"
+                                                      "format": "float"
+                                                      "example": 10
+                                                  "sku":
+                                                      "type": "string"
+                                                      "example": "SKU00X"
+                                                  "stock":
+                                                      "type": "number"
+                                                      "description": "autogenerated, only for (GET) /api/products"
+                                                      "example": 140
+                                            - "required":
+                                                  - "product_id"
+                                                  - "store_id"
+                                                  - "quantity"
+                                                  - "min_stock"
+                                              "type": "object"
+                                              "properties":
+                                                  "id":
+                                                      "type": "string"
+                                                      "format": "uuid"
+                                                      "description": "autogenerated"
+                                                      "example": "3412a2ed-b08c-4580-a196-62187c698eb8"
+                                                  "product_id":
+                                                      "type": "string"
+                                                      "format": "uuid"
+                                                      "description": "autogenerated"
+                                                      "example": "3412a2ed-b08c-4580-a196-62187c698eb8"
+                                                  "store_id":
+                                                      "type": "string"
+                                                      "example": "<UUID_FOR_STORE_5>"
+                                                      "description": "id of store"
+                                                  "quantity":
+                                                      "type": "number"
+                                                      "format": "int"
+                                                      "description": "avaliable stock of product in store"
+                                                      "example": 100
+                                                  "min_stock":
+                                                      "type": "number"
+                                                      "format": "int"
+                                                      "description": "stock threshold for product in store"
+                                                      "example": 140
+                                            - "required":
+                                                  - "product_id"
+                                                  - "quantity"
+                                                  - "type"
+                                              "type": "object"
+                                              "properties":
+                                                  "id":
+                                                      "type": "string"
+                                                      "format": "uuid"
+                                                      "description": "autogenerated"
+                                                      "example": "3412a2ed-b08c-4580-a196-62187c698eb8"
+                                                  "product_id":
+                                                      "type": "string"
+                                                      "format": "uuid"
+                                                      "description": "autogenerated"
+                                                      "example": "3412a2ed-b08c-4580-a196-62187c698eb8"
+                                                  "source_store_id":
+                                                      "type": "string"
+                                                      "example": "<UUID_FOR_STORE_5>"
+                                                      "description": "id of source store"
+                                                  "target_store_id":
+                                                      "type": "string"
+                                                      "example": "<UUID_FOR_STORE_5>"
+                                                      "description": "id of target store"
+                                                  "quantity":
+                                                      "type": "number"
+                                                      "format": "int"
+                                                      "example": 100
+                                                      "description": "ammount of stock to move from source to target store inventory"
+                                                  "type":
+                                                      "enum":
+                                                          - "TRANSFER"
+                                                          - "IN"
+                                                          - "OUT"
+                                                      "type": "string"
+                                                      "description": "type of transaction"
+                                                      "example": "TRANSFER"
+                "200":
+                    "description": "successful operation"
+                    "content":
+                        "application/json":
+                            "schema":
+                                "type": "object"
+                                "properties":
+                                    "ok":
+                                        "type": "boolean"
+                                        "description": "request completed correctly"
+                                    "data":
+                                        "anyOf":
+                                            - "required":
+                                                  - "name"
+                                                  - "price"
+                                                  - "sku"
+                                              "type": "object"
+                                              "properties":
+                                                  "id":
+                                                      "type": "string"
+                                                      "format": "uuid"
+                                                      "description": "autogenerated"
+                                                      "example": "3412a2ed-b08c-4580-a196-62187c698eb8"
+                                                  "name":
+                                                      "type": "string"
+                                                      "example": "Product X"
+                                                  "description":
+                                                      "type": "string"
+                                                      "example": "this is a description for product X"
+                                                  "price":
+                                                      "type": "number"
+                                                      "format": "float"
+                                                      "example": 10
+                                                  "sku":
+                                                      "type": "string"
+                                                      "example": "SKU00X"
+                                                  "stock":
+                                                      "type": "number"
+                                                      "description": "autogenerated, only for (GET) /api/products"
+                                                      "example": 140
+                                            - "required":
+                                                  - "product_id"
+                                                  - "quantity"
+                                                  - "type"
+                                              "type": "object"
+                                              "properties":
+                                                  "id":
+                                                      "type": "string"
+                                                      "format": "uuid"
+                                                      "description": "autogenerated"
+                                                      "example": "3412a2ed-b08c-4580-a196-62187c698eb8"
+                                                  "product_id":
+                                                      "type": "string"
+                                                      "format": "uuid"
+                                                      "description": "autogenerated"
+                                                      "example": "3412a2ed-b08c-4580-a196-62187c698eb8"
+                                                  "source_store_id":
+                                                      "type": "string"
+                                                      "example": "<UUID_FOR_STORE_5>"
+                                                      "description": "id of source store"
+                                                  "target_store_id":
+                                                      "type": "string"
+                                                      "example": "<UUID_FOR_STORE_5>"
+                                                      "description": "id of target store"
+                                                  "quantity":
+                                                      "type": "number"
+                                                      "format": "int"
+                                                      "example": 100
+                                                      "description": "ammount of stock to move from source to target store inventory"
+                                                  "type":
+                                                      "enum":
+                                                          - "TRANSFER"
+                                                          - "IN"
+                                                          - "OUT"
+                                                      "type": "string"
+                                                      "description": "type of transaction"
+                                                      "example": "TRANSFER"
+                                    "payload":
+                                        "type": "object"
+                                        "description": "input values"
+                                        "anyOf":
+                                            - "required":
+                                                  - "name"
+                                                  - "price"
+                                                  - "sku"
+                                              "type": "object"
+                                              "properties":
+                                                  "id":
+                                                      "type": "string"
+                                                      "format": "uuid"
+                                                      "description": "autogenerated"
+                                                      "example": "3412a2ed-b08c-4580-a196-62187c698eb8"
+                                                  "name":
+                                                      "type": "string"
+                                                      "example": "Product X"
+                                                  "description":
+                                                      "type": "string"
+                                                      "example": "this is a description for product X"
+                                                  "price":
+                                                      "type": "number"
+                                                      "format": "float"
+                                                      "example": 10
+                                                  "sku":
+                                                      "type": "string"
+                                                      "example": "SKU00X"
+                                                  "stock":
+                                                      "type": "number"
+                                                      "description": "autogenerated, only for (GET) /api/products"
+                                                      "example": 140
+                                            - "required":
+                                                  - "product_id"
+                                                  - "quantity"
+                                                  - "type"
+                                              "type": "object"
+                                              "properties":
+                                                  "id":
+                                                      "type": "string"
+                                                      "format": "uuid"
+                                                      "description": "autogenerated"
+                                                      "example": "3412a2ed-b08c-4580-a196-62187c698eb8"
+                                                  "product_id":
+                                                      "type": "string"
+                                                      "format": "uuid"
+                                                      "description": "autogenerated"
+                                                      "example": "3412a2ed-b08c-4580-a196-62187c698eb8"
+                                                  "source_store_id":
+                                                      "type": "string"
+                                                      "example": "<UUID_FOR_STORE_5>"
+                                                      "description": "id of source store"
+                                                  "target_store_id":
+                                                      "type": "string"
+                                                      "example": "<UUID_FOR_STORE_5>"
+                                                      "description": "id of target store"
+                                                  "quantity":
+                                                      "type": "number"
+                                                      "format": "int"
+                                                      "example": 100
+                                                      "description": "ammount of stock to move from source to target store inventory"
+                                                  "type":
+                                                      "enum":
+                                                          - "TRANSFER"
+                                                          - "IN"
+                                                          - "OUT"
+                                                      "type": "string"
+                                                      "description": "type of transaction"
+                                                      "example": "TRANSFER"
+    "/api/stores/health":
+        "get":
+            "tags":
+                - "Stores"
+            "summary": "Get health of stores app"
+            "description": "Get health of stores app"
+            "operationId": "storesHealth"
+            "responses":
+                "200":
+                    "description": "successful operation"
+                    "content":
+                        "application/json":
+                            "schema":
+                                "type": "object"
+                                "properties":
+                                    "ok":
+                                        "type": "boolean"
+                                        "description": "request completed correctly"
+                                    "from":
+                                        "type": "string"
+                                        "example": "products"
+                                        "description": "service name"
+    "/api/stores/{store_id}/inventory":
+        "get":
+            "tags":
+                - "Stores"
+            "summary": "Get list store stock inventory"
+            "description": "Get list store stock inventory"
+            "operationId": "storesStock"
+            "parameters":
+                - "name": "store_id"
+                  "in": "path"
+                  "description": "store_id to filter"
+                  "required": true
+                  "schema":
+                      "type": "string"
+                      "example": "<UUID_FOR_STORE_5>"
+            "responses":
+                "default":
+                    "description": "Unexpected error or not found"
+                    "content":
+                        "application/json":
+                            "schema":
+                                "type": "object"
+                                "properties":
+                                    "ok":
+                                        "type": "boolean"
+                                        "description": "request completed correctly"
+                                    "length":
+                                        "type": "number"
+                                        "example": 0
+                                        "description": "total items in page"
+                                    "total":
+                                        "type": "number"
+                                        "example": 0
+                                        "description": "total items in query"
+                                    "data":
+                                        "type": "array"
+                                        "example": []
+                                        "description": "array or value of processed element"
+                                        "items":
+                                            "required":
+                                                - "name"
+                                                - "price"
+                                                - "sku"
+                                            "type": "object"
+                                            "properties":
+                                                "id":
+                                                    "type": "string"
+                                                    "format": "uuid"
+                                                    "description": "autogenerated"
+                                                    "example": "3412a2ed-b08c-4580-a196-62187c698eb8"
+                                                "name":
+                                                    "type": "string"
+                                                    "example": "Product X"
+                                                "description":
+                                                    "type": "string"
+                                                    "example": "this is a description for product X"
+                                                "price":
+                                                    "type": "number"
+                                                    "format": "float"
+                                                    "example": 10
+                                                "sku":
+                                                    "type": "string"
+                                                    "example": "SKU00X"
+                                                "stock":
+                                                    "type": "number"
+                                                    "description": "autogenerated, only for (GET) /api/products"
+                                                    "example": 140
+                "200":
+                    "description": "successful operation"
+                    "content":
+                        "application/json":
+                            "schema":
+                                "type": "object"
+                                "properties":
+                                    "ok":
+                                        "type": "boolean"
+                                        "description": "request completed correctly"
+                                    "length":
+                                        "type": "number"
+                                        "example": 10
+                                        "description": "total items in page"
+                                    "total":
+                                        "type": "number"
+                                        "example": 20
+                                        "description": "total items in query"
+                                    "data":
+                                        "type": "array"
+                                        "description": "array of processed elements"
+                                        "items":
+                                            "anyOf":
+                                                - "required":
+                                                      - "name"
+                                                      - "price"
+                                                      - "sku"
+                                                  "type": "object"
+                                                  "properties":
+                                                      "id":
+                                                          "type": "string"
+                                                          "format": "uuid"
+                                                          "description": "autogenerated"
+                                                          "example": "3412a2ed-b08c-4580-a196-62187c698eb8"
+                                                      "name":
+                                                          "type": "string"
+                                                          "example": "Product X"
+                                                      "description":
+                                                          "type": "string"
+                                                          "example": "this is a description for product X"
+                                                      "price":
+                                                          "type": "number"
+                                                          "format": "float"
+                                                          "example": 10
+                                                      "sku":
+                                                          "type": "string"
+                                                          "example": "SKU00X"
+                                                      "stock":
+                                                          "type": "number"
+                                                          "description": "autogenerated, only for (GET) /api/products"
+                                                          "example": 140
+                                                - "required":
+                                                      - "product_id"
+                                                      - "store_id"
+                                                      - "quantity"
+                                                      - "min_stock"
+                                                  "type": "object"
+                                                  "properties":
+                                                      "id":
+                                                          "type": "string"
+                                                          "format": "uuid"
+                                                          "description": "autogenerated"
+                                                          "example": "3412a2ed-b08c-4580-a196-62187c698eb8"
+                                                      "product_id":
+                                                          "type": "string"
+                                                          "format": "uuid"
+                                                          "description": "autogenerated"
+                                                          "example": "3412a2ed-b08c-4580-a196-62187c698eb8"
+                                                      "store_id":
+                                                          "type": "string"
+                                                          "example": "<UUID_FOR_STORE_5>"
+                                                          "description": "id of store"
+                                                      "quantity":
+                                                          "type": "number"
+                                                          "format": "int"
+                                                          "description": "avaliable stock of product in store"
+                                                          "example": 100
+                                                      "min_stock":
+                                                          "type": "number"
+                                                          "format": "int"
+                                                          "description": "stock threshold for product in store"
+                                                          "example": 140
+    "/api/inventory/health":
+        "get":
+            "tags":
+                - "Inventory"
+            "summary": "Get health of inventory app"
+            "description": "Get health of inventory app"
+            "operationId": "inventoryHealth"
+            "responses":
+                "200":
+                    "description": "successful operation"
+                    "content":
+                        "application/json":
+                            "schema":
+                                "type": "object"
+                                "properties":
+                                    "ok":
+                                        "type": "boolean"
+                                        "description": "request completed correctly"
+                                    "from":
+                                        "type": "string"
+                                        "example": "products"
+                                        "description": "service name"
+    "/api/inventory/alerts":
+        "get":
+            "tags":
+                - "Inventory"
+            "summary": "List low stock of products in stores"
+            "description": "Get full list of stores with low stock of products"
+            "operationId": "inventoryList"
+            "responses":
+                "default":
+                    "description": "Unexpected error or not found"
+                    "content":
+                        "application/json":
+                            "schema":
+                                "type": "object"
+                                "properties":
+                                    "ok":
+                                        "type": "boolean"
+                                        "description": "request completed correctly"
+                                    "length":
+                                        "type": "number"
+                                        "example": 0
+                                        "description": "total items in page"
+                                    "total":
+                                        "type": "number"
+                                        "example": 0
+                                        "description": "total items in query"
+                                    "data":
+                                        "type": "array"
+                                        "example": []
+                                        "description": "array or value of processed element"
+                                        "items":
+                                            "required":
+                                                - "name"
+                                                - "price"
+                                                - "sku"
+                                            "type": "object"
+                                            "properties":
+                                                "id":
+                                                    "type": "string"
+                                                    "format": "uuid"
+                                                    "description": "autogenerated"
+                                                    "example": "3412a2ed-b08c-4580-a196-62187c698eb8"
+                                                "name":
+                                                    "type": "string"
+                                                    "example": "Product X"
+                                                "description":
+                                                    "type": "string"
+                                                    "example": "this is a description for product X"
+                                                "price":
+                                                    "type": "number"
+                                                    "format": "float"
+                                                    "example": 10
+                                                "sku":
+                                                    "type": "string"
+                                                    "example": "SKU00X"
+                                                "stock":
+                                                    "type": "number"
+                                                    "description": "autogenerated, only for (GET) /api/products"
+                                                    "example": 140
+                "200":
+                    "description": "successful operation"
+                    "content":
+                        "application/json":
+                            "schema":
+                                "type": "object"
+                                "properties":
+                                    "ok":
+                                        "type": "boolean"
+                                        "description": "request completed correctly"
+                                    "length":
+                                        "type": "number"
+                                        "example": 10
+                                        "description": "total items in page"
+                                    "total":
+                                        "type": "number"
+                                        "example": 20
+                                        "description": "total items in query"
+                                    "data":
+                                        "type": "array"
+                                        "description": "array of processed elements"
+                                        "items":
+                                            "anyOf":
+                                                - "required":
+                                                      - "name"
+                                                      - "price"
+                                                      - "sku"
+                                                  "type": "object"
+                                                  "properties":
+                                                      "id":
+                                                          "type": "string"
+                                                          "format": "uuid"
+                                                          "description": "autogenerated"
+                                                          "example": "3412a2ed-b08c-4580-a196-62187c698eb8"
+                                                      "name":
+                                                          "type": "string"
+                                                          "example": "Product X"
+                                                      "description":
+                                                          "type": "string"
+                                                          "example": "this is a description for product X"
+                                                      "price":
+                                                          "type": "number"
+                                                          "format": "float"
+                                                          "example": 10
+                                                      "sku":
+                                                          "type": "string"
+                                                          "example": "SKU00X"
+                                                      "stock":
+                                                          "type": "number"
+                                                          "description": "autogenerated, only for (GET) /api/products"
+                                                          "example": 140
+                                                - "required":
+                                                      - "product_id"
+                                                      - "store_id"
+                                                      - "quantity"
+                                                      - "min_stock"
+                                                  "type": "object"
+                                                  "properties":
+                                                      "id":
+                                                          "type": "string"
+                                                          "format": "uuid"
+                                                          "description": "autogenerated"
+                                                          "example": "3412a2ed-b08c-4580-a196-62187c698eb8"
+                                                      "product_id":
+                                                          "type": "string"
+                                                          "format": "uuid"
+                                                          "description": "autogenerated"
+                                                          "example": "3412a2ed-b08c-4580-a196-62187c698eb8"
+                                                      "store_id":
+                                                          "type": "string"
+                                                          "example": "<UUID_FOR_STORE_5>"
+                                                          "description": "id of store"
+                                                      "quantity":
+                                                          "type": "number"
+                                                          "format": "int"
+                                                          "description": "avaliable stock of product in store"
+                                                          "example": 100
+                                                      "min_stock":
+                                                          "type": "number"
+                                                          "format": "int"
+                                                          "description": "stock threshold for product in store"
+                                                          "example": 140
+    "/api/inventory/transfer":
+        "post":
+            "tags":
+                - "Inventory"
+            "summary": "Process a new transfer"
+            "description": "Create a new transfer and updates inventory stocks"
+            "operationId": "inventoryTransfer"
+            "requestBody":
+                "content":
+                    "application/json":
+                        "schema":
+                            "required":
+                                - "product_id"
+                                - "quantity"
+                                - "type"
+                            "type": "object"
+                            "properties":
+                                "id":
+                                    "type": "string"
+                                    "format": "uuid"
+                                    "description": "autogenerated"
+                                    "example": "3412a2ed-b08c-4580-a196-62187c698eb8"
+                                "product_id":
+                                    "type": "string"
+                                    "format": "uuid"
+                                    "description": "autogenerated"
+                                    "example": "3412a2ed-b08c-4580-a196-62187c698eb8"
+                                "source_store_id":
+                                    "type": "string"
+                                    "example": "<UUID_FOR_STORE_5>"
+                                    "description": "id of source store"
+                                "target_store_id":
+                                    "type": "string"
+                                    "example": "<UUID_FOR_STORE_5>"
+                                    "description": "id of target store"
+                                "quantity":
+                                    "type": "number"
+                                    "format": "int"
+                                    "example": 100
+                                    "description": "ammount of stock to move from source to target store inventory"
+                                "type":
+                                    "enum":
+                                        - "TRANSFER"
+                                        - "IN"
+                                        - "OUT"
+                                    "type": "string"
+                                    "description": "type of transaction"
+                                    "example": "TRANSFER"
+            "responses":
+                "default":
+                    "description": "Unexpected error"
+                    "content":
+                        "application/json":
+                            "schema":
+                                "type": "object"
+                                "properties":
+                                    "ok":
+                                        "type": "boolean"
+                                        "default": false
+                                    "error":
+                                        "type": "string"
+                                        "description": "Error name"
+                                        "example": "FieldConstraintViolation"
+                                    "message":
+                                        "type": "string"
+                                        "description": "Error description"
+                                        "example": "Price field value can't be less than zero."
+                                    "payload":
+                                        "type": "object"
+                                        "description": "input values"
+                                        "anyOf":
+                                            - "required":
+                                                  - "name"
+                                                  - "price"
+                                                  - "sku"
+                                              "type": "object"
+                                              "properties":
+                                                  "id":
+                                                      "type": "string"
+                                                      "format": "uuid"
+                                                      "description": "autogenerated"
+                                                      "example": "3412a2ed-b08c-4580-a196-62187c698eb8"
+                                                  "name":
+                                                      "type": "string"
+                                                      "example": "Product X"
+                                                  "description":
+                                                      "type": "string"
+                                                      "example": "this is a description for product X"
+                                                  "price":
+                                                      "type": "number"
+                                                      "format": "float"
+                                                      "example": 10
+                                                  "sku":
+                                                      "type": "string"
+                                                      "example": "SKU00X"
+                                                  "stock":
+                                                      "type": "number"
+                                                      "description": "autogenerated, only for (GET) /api/products"
+                                                      "example": 140
+                                            - "required":
+                                                  - "product_id"
+                                                  - "store_id"
+                                                  - "quantity"
+                                                  - "min_stock"
+                                              "type": "object"
+                                              "properties":
+                                                  "id":
+                                                      "type": "string"
+                                                      "format": "uuid"
+                                                      "description": "autogenerated"
+                                                      "example": "3412a2ed-b08c-4580-a196-62187c698eb8"
+                                                  "product_id":
+                                                      "type": "string"
+                                                      "format": "uuid"
+                                                      "description": "autogenerated"
+                                                      "example": "3412a2ed-b08c-4580-a196-62187c698eb8"
+                                                  "store_id":
+                                                      "type": "string"
+                                                      "example": "<UUID_FOR_STORE_5>"
+                                                      "description": "id of store"
+                                                  "quantity":
+                                                      "type": "number"
+                                                      "format": "int"
+                                                      "description": "avaliable stock of product in store"
+                                                      "example": 100
+                                                  "min_stock":
+                                                      "type": "number"
+                                                      "format": "int"
+                                                      "description": "stock threshold for product in store"
+                                                      "example": 140
+                                            - "required":
+                                                  - "product_id"
+                                                  - "quantity"
+                                                  - "type"
+                                              "type": "object"
+                                              "properties":
+                                                  "id":
+                                                      "type": "string"
+                                                      "format": "uuid"
+                                                      "description": "autogenerated"
+                                                      "example": "3412a2ed-b08c-4580-a196-62187c698eb8"
+                                                  "product_id":
+                                                      "type": "string"
+                                                      "format": "uuid"
+                                                      "description": "autogenerated"
+                                                      "example": "3412a2ed-b08c-4580-a196-62187c698eb8"
+                                                  "source_store_id":
+                                                      "type": "string"
+                                                      "example": "<UUID_FOR_STORE_5>"
+                                                      "description": "id of source store"
+                                                  "target_store_id":
+                                                      "type": "string"
+                                                      "example": "<UUID_FOR_STORE_5>"
+                                                      "description": "id of target store"
+                                                  "quantity":
+                                                      "type": "number"
+                                                      "format": "int"
+                                                      "example": 100
+                                                      "description": "ammount of stock to move from source to target store inventory"
+                                                  "type":
+                                                      "enum":
+                                                          - "TRANSFER"
+                                                          - "IN"
+                                                          - "OUT"
+                                                      "type": "string"
+                                                      "description": "type of transaction"
+                                                      "example": "TRANSFER"
+                "200":
+                    "description": "successful operation"
+                    "content":
+                        "application/json":
+                            "schema":
+                                "type": "object"
+                                "properties":
+                                    "ok":
+                                        "type": "boolean"
+                                        "description": "request completed correctly"
+                                    "data":
+                                        "anyOf":
+                                            - "required":
+                                                  - "name"
+                                                  - "price"
+                                                  - "sku"
+                                              "type": "object"
+                                              "properties":
+                                                  "id":
+                                                      "type": "string"
+                                                      "format": "uuid"
+                                                      "description": "autogenerated"
+                                                      "example": "3412a2ed-b08c-4580-a196-62187c698eb8"
+                                                  "name":
+                                                      "type": "string"
+                                                      "example": "Product X"
+                                                  "description":
+                                                      "type": "string"
+                                                      "example": "this is a description for product X"
+                                                  "price":
+                                                      "type": "number"
+                                                      "format": "float"
+                                                      "example": 10
+                                                  "sku":
+                                                      "type": "string"
+                                                      "example": "SKU00X"
+                                                  "stock":
+                                                      "type": "number"
+                                                      "description": "autogenerated, only for (GET) /api/products"
+                                                      "example": 140
+                                            - "required":
+                                                  - "product_id"
+                                                  - "quantity"
+                                                  - "type"
+                                              "type": "object"
+                                              "properties":
+                                                  "id":
+                                                      "type": "string"
+                                                      "format": "uuid"
+                                                      "description": "autogenerated"
+                                                      "example": "3412a2ed-b08c-4580-a196-62187c698eb8"
+                                                  "product_id":
+                                                      "type": "string"
+                                                      "format": "uuid"
+                                                      "description": "autogenerated"
+                                                      "example": "3412a2ed-b08c-4580-a196-62187c698eb8"
+                                                  "source_store_id":
+                                                      "type": "string"
+                                                      "example": "<UUID_FOR_STORE_5>"
+                                                      "description": "id of source store"
+                                                  "target_store_id":
+                                                      "type": "string"
+                                                      "example": "<UUID_FOR_STORE_5>"
+                                                      "description": "id of target store"
+                                                  "quantity":
+                                                      "type": "number"
+                                                      "format": "int"
+                                                      "example": 100
+                                                      "description": "ammount of stock to move from source to target store inventory"
+                                                  "type":
+                                                      "enum":
+                                                          - "TRANSFER"
+                                                          - "IN"
+                                                          - "OUT"
+                                                      "type": "string"
+                                                      "description": "type of transaction"
+                                                      "example": "TRANSFER"
+                                    "payload":
+                                        "type": "object"
+                                        "description": "input values"
+                                        "anyOf":
+                                            - "required":
+                                                  - "name"
+                                                  - "price"
+                                                  - "sku"
+                                              "type": "object"
+                                              "properties":
+                                                  "id":
+                                                      "type": "string"
+                                                      "format": "uuid"
+                                                      "description": "autogenerated"
+                                                      "example": "3412a2ed-b08c-4580-a196-62187c698eb8"
+                                                  "name":
+                                                      "type": "string"
+                                                      "example": "Product X"
+                                                  "description":
+                                                      "type": "string"
+                                                      "example": "this is a description for product X"
+                                                  "price":
+                                                      "type": "number"
+                                                      "format": "float"
+                                                      "example": 10
+                                                  "sku":
+                                                      "type": "string"
+                                                      "example": "SKU00X"
+                                                  "stock":
+                                                      "type": "number"
+                                                      "description": "autogenerated, only for (GET) /api/products"
+                                                      "example": 140
+                                            - "required":
+                                                  - "product_id"
+                                                  - "quantity"
+                                                  - "type"
+                                              "type": "object"
+                                              "properties":
+                                                  "id":
+                                                      "type": "string"
+                                                      "format": "uuid"
+                                                      "description": "autogenerated"
+                                                      "example": "3412a2ed-b08c-4580-a196-62187c698eb8"
+                                                  "product_id":
+                                                      "type": "string"
+                                                      "format": "uuid"
+                                                      "description": "autogenerated"
+                                                      "example": "3412a2ed-b08c-4580-a196-62187c698eb8"
+                                                  "source_store_id":
+                                                      "type": "string"
+                                                      "example": "<UUID_FOR_STORE_5>"
+                                                      "description": "id of source store"
+                                                  "target_store_id":
+                                                      "type": "string"
+                                                      "example": "<UUID_FOR_STORE_5>"
+                                                      "description": "id of target store"
+                                                  "quantity":
+                                                      "type": "number"
+                                                      "format": "int"
+                                                      "example": 100
+                                                      "description": "ammount of stock to move from source to target store inventory"
+                                                  "type":
+                                                      "enum":
+                                                          - "TRANSFER"
+                                                          - "IN"
+                                                          - "OUT"
+                                                      "type": "string"
+                                                      "description": "type of transaction"
+                                                      "example": "TRANSFER"
+"components":
+    "schemas":
+        "Products":
+            "required":
+                - "name"
+                - "price"
+                - "sku"
+            "type": "object"
+            "properties":
+                "id":
+                    "type": "string"
+                    "format": "uuid"
+                    "description": "autogenerated"
+                    "example": "3412a2ed-b08c-4580-a196-62187c698eb8"
+                "name":
+                    "type": "string"
+                    "example": "Product X"
+                "description":
+                    "type": "string"
+                    "example": "this is a description for product X"
+                "price":
+                    "type": "number"
+                    "format": "float"
+                    "example": 10
+                "sku":
+                    "type": "string"
+                    "example": "SKU00X"
+                "stock":
+                    "type": "number"
+                    "description": "autogenerated, only for (GET) /api/products"
+                    "example": 140
+        "Inventory":
+            "required":
+                - "product_id"
+                - "store_id"
+                - "quantity"
+                - "min_stock"
+            "type": "object"
+            "properties":
+                "id":
+                    "type": "string"
+                    "format": "uuid"
+                    "description": "autogenerated"
+                    "example": "3412a2ed-b08c-4580-a196-62187c698eb8"
+                "product_id":
+                    "type": "string"
+                    "format": "uuid"
+                    "description": "autogenerated"
+                    "example": "3412a2ed-b08c-4580-a196-62187c698eb8"
+                "store_id":
+                    "type": "string"
+                    "example": "<UUID_FOR_STORE_5>"
+                    "description": "id of store"
+                "quantity":
+                    "type": "number"
+                    "format": "int"
+                    "description": "avaliable stock of product in store"
+                    "example": 100
+                "min_stock":
+                    "type": "number"
+                    "format": "int"
+                    "description": "stock threshold for product in store"
+                    "example": 140
+        "Transfer":
+            "required":
+                - "product_id"
+                - "quantity"
+                - "type"
+            "type": "object"
+            "properties":
+                "id":
+                    "type": "string"
+                    "format": "uuid"
+                    "description": "autogenerated"
+                    "example": "3412a2ed-b08c-4580-a196-62187c698eb8"
+                "product_id":
+                    "type": "string"
+                    "format": "uuid"
+                    "description": "autogenerated"
+                    "example": "3412a2ed-b08c-4580-a196-62187c698eb8"
+                "source_store_id":
+                    "type": "string"
+                    "example": "<UUID_FOR_STORE_5>"
+                    "description": "id of source store"
+                "target_store_id":
+                    "type": "string"
+                    "example": "<UUID_FOR_STORE_5>"
+                    "description": "id of target store"
+                "quantity":
+                    "type": "number"
+                    "format": "int"
+                    "example": 100
+                    "description": "ammount of stock to move from source to target store inventory"
+                "type":
+                    "enum":
+                        - "TRANSFER"
+                        - "IN"
+                        - "OUT"
+                    "type": "string"
+                    "description": "type of transaction"
+                    "example": "TRANSFER"
+        "HealthResponse":
+            "type": "object"
+            "properties":
+                "ok":
+                    "type": "boolean"
+                    "description": "request completed correctly"
+                "from":
+                    "type": "string"
+                    "example": "products"
+                    "description": "service name"
+        "ApiMultiResponse":
+            "type": "object"
+            "properties":
+                "ok":
+                    "type": "boolean"
+                    "description": "request completed correctly"
+                "length":
+                    "type": "number"
+                    "example": 10
+                    "description": "total items in page"
+                "total":
+                    "type": "number"
+                    "example": 20
+                    "description": "total items in query"
+                "data":
+                    "type": "array"
+                    "description": "array of processed elements"
+                    "items":
+                        "anyOf":
+                            - "required":
+                                  - "name"
+                                  - "price"
+                                  - "sku"
+                              "type": "object"
+                              "properties":
+                                  "id":
+                                      "type": "string"
+                                      "format": "uuid"
+                                      "description": "autogenerated"
+                                      "example": "3412a2ed-b08c-4580-a196-62187c698eb8"
+                                  "name":
+                                      "type": "string"
+                                      "example": "Product X"
+                                  "description":
+                                      "type": "string"
+                                      "example": "this is a description for product X"
+                                  "price":
+                                      "type": "number"
+                                      "format": "float"
+                                      "example": 10
+                                  "sku":
+                                      "type": "string"
+                                      "example": "SKU00X"
+                                  "stock":
+                                      "type": "number"
+                                      "description": "autogenerated, only for (GET) /api/products"
+                                      "example": 140
+                            - "required":
+                                  - "product_id"
+                                  - "store_id"
+                                  - "quantity"
+                                  - "min_stock"
+                              "type": "object"
+                              "properties":
+                                  "id":
+                                      "type": "string"
+                                      "format": "uuid"
+                                      "description": "autogenerated"
+                                      "example": "3412a2ed-b08c-4580-a196-62187c698eb8"
+                                  "product_id":
+                                      "type": "string"
+                                      "format": "uuid"
+                                      "description": "autogenerated"
+                                      "example": "3412a2ed-b08c-4580-a196-62187c698eb8"
+                                  "store_id":
+                                      "type": "string"
+                                      "example": "<UUID_FOR_STORE_5>"
+                                      "description": "id of store"
+                                  "quantity":
+                                      "type": "number"
+                                      "format": "int"
+                                      "description": "avaliable stock of product in store"
+                                      "example": 100
+                                  "min_stock":
+                                      "type": "number"
+                                      "format": "int"
+                                      "description": "stock threshold for product in store"
+                                      "example": 140
+        "ApiSingleResponse":
+            "type": "object"
+            "properties":
+                "ok":
+                    "type": "boolean"
+                    "description": "request completed correctly"
+                "data":
+                    "anyOf":
+                        - "required":
+                              - "name"
+                              - "price"
+                              - "sku"
+                          "type": "object"
+                          "properties":
+                              "id":
+                                  "type": "string"
+                                  "format": "uuid"
+                                  "description": "autogenerated"
+                                  "example": "3412a2ed-b08c-4580-a196-62187c698eb8"
+                              "name":
+                                  "type": "string"
+                                  "example": "Product X"
+                              "description":
+                                  "type": "string"
+                                  "example": "this is a description for product X"
+                              "price":
+                                  "type": "number"
+                                  "format": "float"
+                                  "example": 10
+                              "sku":
+                                  "type": "string"
+                                  "example": "SKU00X"
+                              "stock":
+                                  "type": "number"
+                                  "description": "autogenerated, only for (GET) /api/products"
+                                  "example": 140
+                        - "required":
+                              - "product_id"
+                              - "quantity"
+                              - "type"
+                          "type": "object"
+                          "properties":
+                              "id":
+                                  "type": "string"
+                                  "format": "uuid"
+                                  "description": "autogenerated"
+                                  "example": "3412a2ed-b08c-4580-a196-62187c698eb8"
+                              "product_id":
+                                  "type": "string"
+                                  "format": "uuid"
+                                  "description": "autogenerated"
+                                  "example": "3412a2ed-b08c-4580-a196-62187c698eb8"
+                              "source_store_id":
+                                  "type": "string"
+                                  "example": "<UUID_FOR_STORE_5>"
+                                  "description": "id of source store"
+                              "target_store_id":
+                                  "type": "string"
+                                  "example": "<UUID_FOR_STORE_5>"
+                                  "description": "id of target store"
+                              "quantity":
+                                  "type": "number"
+                                  "format": "int"
+                                  "example": 100
+                                  "description": "ammount of stock to move from source to target store inventory"
+                              "type":
+                                  "enum":
+                                      - "TRANSFER"
+                                      - "IN"
+                                      - "OUT"
+                                  "type": "string"
+                                  "description": "type of transaction"
+                                  "example": "TRANSFER"
+                "payload":
+                    "type": "object"
+                    "description": "input values"
+                    "anyOf":
+                        - "required":
+                              - "name"
+                              - "price"
+                              - "sku"
+                          "type": "object"
+                          "properties":
+                              "id":
+                                  "type": "string"
+                                  "format": "uuid"
+                                  "description": "autogenerated"
+                                  "example": "3412a2ed-b08c-4580-a196-62187c698eb8"
+                              "name":
+                                  "type": "string"
+                                  "example": "Product X"
+                              "description":
+                                  "type": "string"
+                                  "example": "this is a description for product X"
+                              "price":
+                                  "type": "number"
+                                  "format": "float"
+                                  "example": 10
+                              "sku":
+                                  "type": "string"
+                                  "example": "SKU00X"
+                              "stock":
+                                  "type": "number"
+                                  "description": "autogenerated, only for (GET) /api/products"
+                                  "example": 140
+                        - "required":
+                              - "product_id"
+                              - "quantity"
+                              - "type"
+                          "type": "object"
+                          "properties":
+                              "id":
+                                  "type": "string"
+                                  "format": "uuid"
+                                  "description": "autogenerated"
+                                  "example": "3412a2ed-b08c-4580-a196-62187c698eb8"
+                              "product_id":
+                                  "type": "string"
+                                  "format": "uuid"
+                                  "description": "autogenerated"
+                                  "example": "3412a2ed-b08c-4580-a196-62187c698eb8"
+                              "source_store_id":
+                                  "type": "string"
+                                  "example": "<UUID_FOR_STORE_5>"
+                                  "description": "id of source store"
+                              "target_store_id":
+                                  "type": "string"
+                                  "example": "<UUID_FOR_STORE_5>"
+                                  "description": "id of target store"
+                              "quantity":
+                                  "type": "number"
+                                  "format": "int"
+                                  "example": 100
+                                  "description": "ammount of stock to move from source to target store inventory"
+                              "type":
+                                  "enum":
+                                      - "TRANSFER"
+                                      - "IN"
+                                      - "OUT"
+                                  "type": "string"
+                                  "description": "type of transaction"
+                                  "example": "TRANSFER"
+        "ErrorListResponse":
+            "type": "object"
+            "properties":
+                "ok":
+                    "type": "boolean"
+                    "description": "request completed correctly"
+                "length":
+                    "type": "number"
+                    "example": 0
+                    "description": "total items in page"
+                "total":
+                    "type": "number"
+                    "example": 0
+                    "description": "total items in query"
+                "data":
+                    "type": "array"
+                    "example": []
+                    "description": "array or value of processed element"
+                    "items":
+                        "required":
+                            - "name"
+                            - "price"
+                            - "sku"
+                        "type": "object"
+                        "properties":
+                            "id":
+                                "type": "string"
+                                "format": "uuid"
+                                "description": "autogenerated"
+                                "example": "3412a2ed-b08c-4580-a196-62187c698eb8"
+                            "name":
+                                "type": "string"
+                                "example": "Product X"
+                            "description":
+                                "type": "string"
+                                "example": "this is a description for product X"
+                            "price":
+                                "type": "number"
+                                "format": "float"
+                                "example": 10
+                            "sku":
+                                "type": "string"
+                                "example": "SKU00X"
+                            "stock":
+                                "type": "number"
+                                "description": "autogenerated, only for (GET) /api/products"
+                                "example": 140
+        "ErrorResponse":
+            "type": "object"
+            "properties":
+                "ok":
+                    "type": "boolean"
+                    "default": false
+                "error":
+                    "type": "string"
+                    "description": "Error name"
+                    "example": "FieldConstraintViolation"
+                "message":
+                    "type": "string"
+                    "description": "Error description"
+                    "example": "Price field value can't be less than zero."
+                "payload":
+                    "type": "object"
+                    "description": "input values"
+                    "anyOf":
+                        - "required":
+                              - "name"
+                              - "price"
+                              - "sku"
+                          "type": "object"
+                          "properties":
+                              "id":
+                                  "type": "string"
+                                  "format": "uuid"
+                                  "description": "autogenerated"
+                                  "example": "3412a2ed-b08c-4580-a196-62187c698eb8"
+                              "name":
+                                  "type": "string"
+                                  "example": "Product X"
+                              "description":
+                                  "type": "string"
+                                  "example": "this is a description for product X"
+                              "price":
+                                  "type": "number"
+                                  "format": "float"
+                                  "example": 10
+                              "sku":
+                                  "type": "string"
+                                  "example": "SKU00X"
+                              "stock":
+                                  "type": "number"
+                                  "description": "autogenerated, only for (GET) /api/products"
+                                  "example": 140
+                        - "required":
+                              - "product_id"
+                              - "store_id"
+                              - "quantity"
+                              - "min_stock"
+                          "type": "object"
+                          "properties":
+                              "id":
+                                  "type": "string"
+                                  "format": "uuid"
+                                  "description": "autogenerated"
+                                  "example": "3412a2ed-b08c-4580-a196-62187c698eb8"
+                              "product_id":
+                                  "type": "string"
+                                  "format": "uuid"
+                                  "description": "autogenerated"
+                                  "example": "3412a2ed-b08c-4580-a196-62187c698eb8"
+                              "store_id":
+                                  "type": "string"
+                                  "example": "<UUID_FOR_STORE_5>"
+                                  "description": "id of store"
+                              "quantity":
+                                  "type": "number"
+                                  "format": "int"
+                                  "description": "avaliable stock of product in store"
+                                  "example": 100
+                              "min_stock":
+                                  "type": "number"
+                                  "format": "int"
+                                  "description": "stock threshold for product in store"
+                                  "example": 140
+                        - "required":
+                              - "product_id"
+                              - "quantity"
+                              - "type"
+                          "type": "object"
+                          "properties":
+                              "id":
+                                  "type": "string"
+                                  "format": "uuid"
+                                  "description": "autogenerated"
+                                  "example": "3412a2ed-b08c-4580-a196-62187c698eb8"
+                              "product_id":
+                                  "type": "string"
+                                  "format": "uuid"
+                                  "description": "autogenerated"
+                                  "example": "3412a2ed-b08c-4580-a196-62187c698eb8"
+                              "source_store_id":
+                                  "type": "string"
+                                  "example": "<UUID_FOR_STORE_5>"
+                                  "description": "id of source store"
+                              "target_store_id":
+                                  "type": "string"
+                                  "example": "<UUID_FOR_STORE_5>"
+                                  "description": "id of target store"
+                              "quantity":
+                                  "type": "number"
+                                  "format": "int"
+                                  "example": 100
+                                  "description": "ammount of stock to move from source to target store inventory"
+                              "type":
+                                  "enum":
+                                      - "TRANSFER"
+                                      - "IN"
+                                      - "OUT"
+                                  "type": "string"
+                                  "description": "type of transaction"
+                                  "example": "TRANSFER"

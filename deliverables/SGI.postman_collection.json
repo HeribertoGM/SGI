@@ -1,0 +1,412 @@
+{
+	"info": {
+		"_postman_id": "939107c1-f677-4fe5-98d3-378dec494f90",
+		"name": "SGI",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Product",
+			"item": [
+				{
+					"name": "health",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{products}}/health",
+							"host": [
+								"{{products}}"
+							],
+							"path": [
+								"health"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "list",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{products}}/",
+							"host": [
+								"{{products}}"
+							],
+							"path": [
+								""
+							],
+							"query": [
+								{
+									"key": "category",
+									"value": "Category A",
+									"disabled": true
+								},
+								{
+									"key": "sku",
+									"value": "SKU015",
+									"disabled": true
+								},
+								{
+									"key": "minPrice",
+									"value": "10",
+									"disabled": true
+								},
+								{
+									"key": "maxPrice",
+									"value": "20",
+									"disabled": true
+								},
+								{
+									"key": "minStock",
+									"value": "100",
+									"disabled": true
+								},
+								{
+									"key": "maxStock",
+									"value": "200",
+									"disabled": true
+								},
+								{
+									"key": "page",
+									"value": "1",
+									"disabled": true
+								},
+								{
+									"key": "perPage",
+									"value": "15",
+									"disabled": true
+								},
+								{
+									"key": "orderBy",
+									"value": "stock",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "detail",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{products}}/{{product_id}}",
+							"host": [
+								"{{products}}"
+							],
+							"path": [
+								"{{product_id}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "new",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Product X\",\n    \"description\": \"Description of product X\",\n    \"category\": \"Category X\",\n    \"price\": 5.00,\n    \"sku\": \"SKUXXX\"\n}"
+						},
+						"url": {
+							"raw": "{{products}}/",
+							"host": [
+								"{{products}}"
+							],
+							"path": [
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "new (Error)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"hola\": \"mundo\",\n    \"hola2\": \"mundo2\"\n}"
+						},
+						"url": {
+							"raw": "{{products}}/",
+							"host": [
+								"{{products}}"
+							],
+							"path": [
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Product Z\",\n    \"total\": \"lorem ipsum\",\n    \"description\": \"Description of Product Z\",\n    \"price\": 10.00\n}"
+						},
+						"url": {
+							"raw": "{{products}}/{{product_id}}",
+							"host": [
+								"{{products}}"
+							],
+							"path": [
+								"{{product_id}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "remove",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{products}}/{{product_id}}",
+							"host": [
+								"{{products}}"
+							],
+							"path": [
+								"{{product_id}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Inventory",
+			"item": [
+				{
+					"name": "health",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{inventory}}/health",
+							"host": [
+								"{{inventory}}"
+							],
+							"path": [
+								"health"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "alerts",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{inventory}}/alerts",
+							"host": [
+								"{{inventory}}"
+							],
+							"path": [
+								"alerts"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "transfer (TRANSFER)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"product_id\": \"9c5e63b5-e64b-4f42-bbc4-2eb11ee56ad1\",\n\t\"source_store_id\": \"<UUID_FOR_STORE_2>\",\n\t\"target_store_id\": \"<UUID_FOR_STORE_4>\",\n\t\"quantity\": 10,\n\t\"type\": \"TRANSFER\"\n}"
+						},
+						"url": {
+							"raw": "{{inventory}}/transfer",
+							"host": [
+								"{{inventory}}"
+							],
+							"path": [
+								"transfer"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "transfer (IN)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"product_id\": \"5ff4dc92-2867-4b42-94d2-32caf1e3b29c\",\n\t\"target_store_id\": \"<UUID_FOR_STORE_4>\",\n\t\"quantity\": 10,\n\t\"type\": \"IN\"\n}"
+						},
+						"url": {
+							"raw": "{{inventory}}/transfer",
+							"host": [
+								"{{inventory}}"
+							],
+							"path": [
+								"transfer"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "transfer (OUT)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"product_id\": \"5ff4dc92-2867-4b42-94d2-32caf1e3b29c\",\n\t\"source_store_id\": \"<UUID_FOR_STORE_2>\",\n\t\"quantity\": 10,\n\t\"type\": \"OUT\"\n}"
+						},
+						"url": {
+							"raw": "{{inventory}}/transfer",
+							"host": [
+								"{{inventory}}"
+							],
+							"path": [
+								"transfer"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "stores",
+			"item": [
+				{
+					"name": "health",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{stores}}/health",
+							"host": [
+								"{{stores}}"
+							],
+							"path": [
+								"health"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "stock",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{stores}}/{{store_id}}/inventory",
+							"host": [
+								"{{stores}}"
+							],
+							"path": [
+								"{{store_id}}",
+								"inventory"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "product_id",
+			"value": ""
+		},
+		{
+			"key": "products",
+			"value": "localhost/api/products"
+		},
+		{
+			"key": "inventory",
+			"value": "localhost/api/inventory"
+		},
+		{
+			"key": "stores",
+			"value": "localhost/api/stores"
+		},
+		{
+			"key": "store_id",
+			"value": "<UUID_FOR_STORE_5>"
+		}
+	]
+}
