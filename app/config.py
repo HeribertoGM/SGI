@@ -34,9 +34,11 @@ def create_app():
 
 	app = Flask(__name__)
 
-	app.config['SQLALCHEMY_DATABASE_URI'] = f'postgresql+psycopg2://{os.getenv("POSTGRES_USER")}:{os.getenv("POSTGRES_PASSWORD")}@localhost:{os.getenv("POSTGRES_PORT")}/{os.getenv("POSTGRES_DB")}'
+	app.config['SQLALCHEMY_DATABASE_URI'] = f'postgresql+psycopg2://{os.getenv("POSTGRES_USER")}:{os.getenv("POSTGRES_PASSWORD")}@{os.getenv("POSTGRES_HOST")}:{os.getenv("POSTGRES_PORT")}/{os.getenv("POSTGRES_DB")}'
 	app.config['SQLALCHEMY_TRACK_NOTIFICATIONS'] = False
 
+	if os.getenv("MODULES") == None:
+		raise Exception("MissingEnvironmentKey", "MODULES env missing")
 	modules = os.getenv("MODULES")[1:-1].replace("'", "").split(',')
 
 	init_extensions(app)
