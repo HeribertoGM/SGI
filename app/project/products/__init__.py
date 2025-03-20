@@ -1,19 +1,18 @@
 from flask import Blueprint, jsonify, request
 from sqlalchemy import func
 from sqlalchemy.orm import with_expression
-import json
 
 from config import db
 from models.product import Product, ProductSchema
 from models.inventory import Inventory
 
-bp = Blueprint('products', __name__)
+products_bp = Blueprint('products', __name__)
 
-@bp.get('/health')
+@products_bp.get('/health')
 def health():
-	return jsonify({ "ok": True })
+	return jsonify({ "ok": True, 'from': "products"  })
 
-@bp.get('/')
+@products_bp.get('/')
 def list():
 	stock_expr = func.coalesce(func.sum(Inventory.quantity),0)
 	query = Product.query.outerjoin(Inventory, Product.id == Inventory.product_id).group_by(Product.id).options(with_expression(Product.stock, stock_expr))
@@ -54,7 +53,7 @@ def list():
 	result = schema.dump(products)
 	return jsonify({"ok": True, "total": count, "length": len(result), "data": result})
 
-@bp.post('/')
+@products_bp.post('/')
 def new():
 	new_product = None
 	try:
@@ -72,7 +71,7 @@ def new():
 	data = schema.dump(new_product)
 	return jsonify({"ok": True, "data": data, "payload": request.json})
 
-@bp.get('/<uuid:product_id>')
+@products_bp.get('/<uuid:product_id>')
 def detail(product_id):
 	try:
 		query = Product.query.filter(Product.id == product_id)
@@ -84,7 +83,7 @@ def detail(product_id):
 	except Exception as ex:
 		return jsonify({"ok": False, "error": type(ex).__name__, "msg": str(ex), "payload": {"product_id": product_id}})
 
-@bp.put('/<uuid:product_id>')
+@products_bp.put('/<uuid:product_id>')
 def update(product_id):
 	payload = request.json
 	payload['product_id'] = product_id
@@ -108,7 +107,7 @@ def update(product_id):
 	data = schema.dump(product)
 	return jsonify({"ok": True, "data": data, "payload": payload})
 
-@bp.delete('/<uuid:product_id>')
+@products_bp.delete('/<uuid:product_id>')
 def remove(product_id):
 	product = None
 	try:

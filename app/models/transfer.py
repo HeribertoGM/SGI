@@ -35,6 +35,9 @@ class Transfer(db.Model):
 		
 		if obj['quantity'] < 0:
 			raise Exception('FieldConstraintViolation', 'Quantity field value can\'t be less than zero.')
+		
+		if obj['type'] == 'TRANSFER' and obj['source_store_id'] == obj['target_store_id']:
+			raise Exception('FieldConstraintViolation', 'Source_store_id and target_store_id fields must be different.')
 
 		self.product_id = obj['product_id']
 		self.source_store_id = obj['source_store_id'] if 'source_store_id' in obj else None

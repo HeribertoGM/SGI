@@ -184,3 +184,22 @@ def test_create_wrong_enum_type_transfer():
 		transfer = Transfer(obj)
 	except Exception as ex:
 		assert ex.args[0] == "FieldConstraintViolation"
+
+def test_create_same_source_target_transfer():
+	"""
+	GIVEN a Transfer model
+	WHEN a new Transfer is created with the same source and target
+	THEN check the exception raised == FieldConstraintViolation
+	"""
+	obj = {
+		'product_id': "0bcb2354-db55-4359-9601-fb62884c06c7",
+		'source_store_id': "<UUID_FOR_STORE_T1>",
+		'target_store_id': "<UUID_FOR_STORE_T1>",
+		'quantity': 10,
+		'type': 'TRANSFER'
+	}
+	try:
+		from models.transfer import Transfer
+		transfer = Transfer(obj)
+	except Exception as ex:
+		assert ex.args[0] == "FieldConstraintViolation"

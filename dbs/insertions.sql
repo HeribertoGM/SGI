@@ -30,7 +30,7 @@ INSERT INTO Inventory (product_id, store_id, quantity, min_stock)
 VALUES
   ((SELECT p.id FROM Product p WHERE p.sku = 'SKU001'), '<UUID_FOR_STORE_1>', 200, 15),
   ((SELECT p.id FROM Product p WHERE p.sku = 'SKU002'), '<UUID_FOR_STORE_1>', 100, 10),
-  ((SELECT p.id FROM Product p WHERE p.sku = 'SKU003'), '<UUID_FOR_STORE_2>', 50, 5),
+  ((SELECT p.id FROM Product p WHERE p.sku = 'SKU003'), '<UUID_FOR_STORE_2>', 4, 5),
   ((SELECT p.id FROM Product p WHERE p.sku = 'SKU004'), '<UUID_FOR_STORE_2>', 120, 10),
   ((SELECT p.id FROM Product p WHERE p.sku = 'SKU005'), '<UUID_FOR_STORE_3>', 150, 20),
   ((SELECT p.id FROM Product p WHERE p.sku = 'SKU006'), '<UUID_FOR_STORE_3>', 80, 8),
