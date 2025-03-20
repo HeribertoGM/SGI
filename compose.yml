@@ -66,3 +66,17 @@ services:
             MODULES: ${APP_MODULES_3}
         ports:
             - ${APP_PORT_3}:${APP_PORT_3}
+    nginx:
+        image: nginx
+        depends_on:
+            products:
+                condition: service_started
+            inventory:
+                condition: service_started
+            stores:
+                condition: service_started
+        container_name: api-gateway
+        ports:
+            - ${API_GATEWAY_PORT}:${API_GATEWAY_PORT}
+        volumes:
+            - ./api-gateway/nginx.conf:/etc/nginx/nginx.conf
