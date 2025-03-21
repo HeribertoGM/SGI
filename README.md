@@ -145,3 +145,7 @@ class Transfer {
 3. **Monorepo:** Centraliza el código en un único repositorio para mantener la consistencia entre instancias y simplificar el despliegue.
 
 4. **Clases Personalizadas:** Se crearon clases como CustomSchema y JoinedSchema que heredan de clases base, extendiendo sus capacidades de forma general y reutilizable.
+
+### Dudas
+
+Cualquier duda o comentario, mandar correo a hgm@heribertogm.com
