@@ -1,0 +1,15 @@
+version: "3.8"
+services:
+    postgresql:
+        image: postgres
+        container_name: postgres_db
+        restart: always
+        environment:
+            POSTGRES_DB: MemSch
+            POSTGRES_USER: usr
+            POSTGRES_PASSWORD: pword
+            POSTGRES_ROOT_PASSWORD: r_pword
+        ports:
+            - 5432:5432
+        volumes:
+            - ./init.sql:/docker-entrypoint-initdb.d/init.sql
